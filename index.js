@@ -62,6 +62,7 @@
 require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
+const { default: axios } = require("axios");
 
 const assistResponse = {
   prompt: {
@@ -73,6 +74,18 @@ const assistResponse = {
   },
 };
 
+const intentList = [
+  "tell me",
+  "tell me about",
+  "I have a question",
+  "I have a query",
+  "one query",
+  "one question",
+  "tell me esg",
+  "hey bot",
+  "tell me something",
+];
+
 const app = express();
 
 app.use(
@@ -83,9 +96,30 @@ app.use(
 
 app.use(bodyParser.json());
 
-app.post("/asked-query", (req, res) => {
+app.post("/asked-query", async (req, res) => {
   try {
-    console.log(req.body.intent.query);
+    let askedQuery = req.body?.intent?.query || "";
+    console.log(askedQuery, "--Initial Query--");
+    for (let curIntent of intentList) {
+      askedQuery.replace(curIntent, "");
+      askedQuery.trim();
+    }
+    console.log(askedQuery, "--Actual Query--");
+    let payload = {
+      query: askedQuery,
+    };
+    await axios({
+      url: "https://057c-35-196-239-226.ngrok.io/get_response",
+      method: "POST",
+      data: payload,
+    }).then((resp) => {
+      let response = resp.data;
+      console.log(response, "--Server Response--");
+      let answer = response?.result || "Didn't got anything!";
+      assistResponse.prompt.firstSimple.speech = answer;
+      assistResponse.prompt.firstSimple.text = answer;
+      return res.json(assistResponse);
+    });
   } catch (err) {
     console.log(err);
   }
