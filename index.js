@@ -88,6 +88,4 @@ app.post("/asked-query", (req, res) => {
   return res.json(assistResponse);
 });
 
-app.listen(process.env.PORT || 8080, () => {
-  console.log("Server up and listening");
-});
+module.exports = app;
