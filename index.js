@@ -101,15 +101,14 @@ app.post("/asked-query", async (req, res) => {
     let askedQuery = req.body?.intent?.query || "";
     console.log(askedQuery, "--Initial Query--");
     for (let curIntent of intentList) {
-      askedQuery.replace(curIntent, "");
-      askedQuery.trim();
+      askedQuery = askedQuery.replace(curIntent, "").trim();
     }
     console.log(askedQuery, "--Actual Query--");
     let payload = {
       query: askedQuery,
     };
     await axios({
-      url: "https://057c-35-196-239-226.ngrok.io/get_response",
+      url: "https://2182-35-196-239-226.ngrok.io/get_response",
       method: "POST",
       data: payload,
     }).then((resp) => {
