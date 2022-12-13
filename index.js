@@ -84,7 +84,11 @@ app.use(
 app.use(bodyParser.json());
 
 app.post("/asked-query", (req, res) => {
-  //   console.log(req.body.message);
+  try {
+    console.log(req.body.intent.query);
+  } catch (err) {
+    console.log(err);
+  }
   return res.json(assistResponse);
 });
 
