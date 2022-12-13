@@ -118,7 +118,7 @@ app.post("/asked-query", async (req, res) => {
       let answer = response?.result || "Didn't got anything!";
       assistResponse.prompt.firstSimple.speech = answer;
       assistResponse.prompt.firstSimple.text = answer;
-      return res.json(assistResponse);
+      //   return res.json(assistResponse);
     });
   } catch (err) {
     console.log(err);
